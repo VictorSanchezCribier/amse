@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -23,7 +22,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-
   final String title;
 
   @override
@@ -32,6 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  double _value = 20;
 
   void _incrementCounter() {
     setState(() {
@@ -45,11 +44,41 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: 
-      Center(
-        child: Image.network("https://picsum.photos/512/1024"),
-      )
-      
+      body: Column(
+      children:[ 
+        Center(
+          child:
+          Container(
+
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(color: Colors.white),
+          height: 400,
+          child: Image.network("https://picsum.photos/512/1024"),
+        ),
+        ),
+        Center(
+        child: Container(
+          width: 500,
+          child: Row(
+            children: [
+              Text("Rotate X : "),
+              Slider(
+                min: 0.0,
+                max: 100.0,
+                value: _value,
+                onChanged: (value) {
+                  setState(() {
+                    _value = value;
+                  });
+                },
+              )
+
+          ],
+          ) 
+        ),
+        ),
+      ],
+      )  
     );
   }
 }
