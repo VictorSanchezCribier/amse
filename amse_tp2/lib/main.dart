@@ -21,6 +21,10 @@ List exos = [
       title: 'Exercice 1',
       subtitle: 'Simple image',
       buildFunc: (context) => exo1.DisplayImageWidget()),
+  Exo(
+      title: 'Exercice 2',
+      subtitle: 'Transformed image',
+      buildFunc: (context) => exo2.DisplayImageWidget()),
   
 ];
 
