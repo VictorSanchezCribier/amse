@@ -34,10 +34,10 @@ List exos = [
       title: 'Exercice 4',
       subtitle: 'Display Tile',
       buildFunc: (context) => exo4.DisplayTileWidget()),
- /* Exo(
+  Exo(
       title: 'Exercice 5',
       subtitle: 'Display Grid',
-      buildFunc: (context) => exo5.DisplayGridWidget()),*/
+      buildFunc: (context) => exo5.DisplayGridWidget()),
 ];
 
 class MenuPage extends StatelessWidget {

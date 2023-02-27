@@ -26,7 +26,7 @@ class _DisplayImageWidget extends State<DisplayImageWidget> {
               decoration: BoxDecoration(color: Colors.white),
               child: Transform(
                 transform:
-                    Matrix4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+                    Matrix4.identity()
                       ..rotateX(pi / 180 * _rotateAngleDegreeX)
                       ..rotateY(_mirror ? pi : 0)
                       ..rotateZ(pi / 180 * _rotateAngleDegreeZ),
