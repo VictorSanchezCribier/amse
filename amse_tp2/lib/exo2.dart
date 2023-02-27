@@ -9,7 +9,7 @@ class DisplayImageWidget extends StatefulWidget {
 }
 
 class _DisplayImageWidget extends State<DisplayImageWidget> {
-  double _rotateAngleDegreeX = 0.2;
+  double _rotateAngleDegreeX = 0.0;
   double _rotateAngleDegreeZ = 0.0;
   bool _mirror = false;
   @override
@@ -40,7 +40,7 @@ class _DisplayImageWidget extends State<DisplayImageWidget> {
             Container(
               height: 25,
               child: Slider(
-                value: _rotateAngleDegreeX,
+                value: _rotateAngleDegreeZ,
                 min: 0,
                 max: 360,
                 onChanged: (double value) {

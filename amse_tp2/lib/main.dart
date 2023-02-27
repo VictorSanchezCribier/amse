@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'exo1.dart' as exo1;
 import 'exo2.dart' as exo2;
+import 'exo4.dart' as exo4;
+import 'exo5.dart' as exo5;
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -9,6 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(home: MenuPage());
   }
 }
+
 class Exo {
   final String? title;
   final String? subtitle;
@@ -16,6 +20,7 @@ class Exo {
 
   const Exo({@required this.title, this.subtitle, @required this.buildFunc});
 }
+
 List exos = [
   Exo(
       title: 'Exercice 1',
@@ -25,7 +30,14 @@ List exos = [
       title: 'Exercice 2',
       subtitle: 'Transformed image',
       buildFunc: (context) => exo2.DisplayImageWidget()),
-  
+  Exo(
+      title: 'Exercice 4',
+      subtitle: 'Display Tile',
+      buildFunc: (context) => exo4.DisplayTileWidget()),
+ /* Exo(
+      title: 'Exercice 5',
+      subtitle: 'Display Grid',
+      buildFunc: (context) => exo5.DisplayGridWidget()),*/
 ];
 
 class MenuPage extends StatelessWidget {
