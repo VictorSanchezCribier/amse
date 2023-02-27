@@ -8,7 +8,7 @@ class DisplayImageWidget extends StatefulWidget {
   State<DisplayImageWidget> createState() => _DisplayImageWidget();
 }
 
-class _DisplayImageWidget extends State<DisplayImageWidget>{
+class _DisplayImageWidget extends State<DisplayImageWidget> {
   double _rotateAngleDegreeX = 0.2;
   double _rotateAngleDegreeZ = 0.0;
   bool _mirror = false;
@@ -34,29 +34,49 @@ class _DisplayImageWidget extends State<DisplayImageWidget>{
                     child: Image.network('https://picsum.photos/512/1024'),
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(color: Colors.white),
-                    height: 400),
+                    height: 300),
               ),
             ),
-            Slider(
-              value: _rotateAngleDegreeX,
-              min: 0,
-              max: 360,
-              onChanged: (double value) {
-                setState(() {
-                  _rotateAngleDegreeZ = value;
-                });
-              },
+            Container(
+              height: 25,
+              child: Slider(
+                value: _rotateAngleDegreeX,
+                min: 0,
+                max: 360,
+                onChanged: (double value) {
+                  setState(() {
+                    _rotateAngleDegreeZ = value;
+                  });
+                },
+              ),
             ),
-             Slider(
-              value: _rotateAngleDegreeX,
-              min: 0,
-              max: 360,
-              onChanged: (double value) {
-                setState(() {
-                  _rotateAngleDegreeX = value;
-                });
-              },
+            Container(
+              height: 25,
+              child: Slider(
+                value: _rotateAngleDegreeX,
+                min: 0,
+                max: 360,
+                onChanged: (double value) {
+                  setState(() {
+                    _rotateAngleDegreeX = value;
+                  });
+                },
+              ),
             ),
+            Container(
+              height: 25,
+              child: TextButton(
+                  onPressed: () {
+                    if (_mirror == false) {
+                      _mirror == true;
+                    } else {
+                      _mirror == false;
+                    }
+                  },
+                  child:
+                  Text("Mirroir"),
+                  ),
+            )
           ]),
         ));
   }
