@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
 import 'exo4.dart' as exo4;
+
+
+class _Tile {
+  String imageURL;
+  Alignment alignment;
+
+  _Tile({required this.imageURL, required this.alignment});
+
+  Widget croppedImageTile() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: this.alignment,
+            widthFactor: 0.3,
+            heightFactor: 0.3,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 class DisplayGridWidget extends StatelessWidget {
-  exo4.Tile tile = new exo4.Tile(
-      imageURL: 'https://picsum.photos/512', alignment: Alignment(0, 0));
-  
+
   @override
   Widget build(BuildContext context) {
     return GridView.count(
@@ -12,21 +36,59 @@ class DisplayGridWidget extends StatelessWidget {
       mainAxisSpacing: 10,
       children: <Widget>[
         Container(
-          child: exo4.DisplayTileWidget().createTileWidgetFrom(tile),
-        ),
-        Container(),
-        Container(),
-        Container(),
-        Container(),
-        Container(
-          
-        ),
-        Container(
+          child: _Tile(
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(-1, -1))
+            .croppedImageTile()
             ),
         Container(
-           ),
+          child: _Tile(
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(0, -1))
+            .croppedImageTile()
+            ),
         Container(
-            )
+          child: _Tile(
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(1, -1))
+            .croppedImageTile()
+        ),
+        Container(
+          child: _Tile(
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(-1, 0))
+            .croppedImageTile()
+        ),
+        Container(
+          child: _Tile(
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(0, 0))
+            .croppedImageTile()
+            ),
+        Container(
+          child: _Tile(
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(1, 0))
+            .croppedImageTile()
+            ),
+        Container(
+          child: _Tile(
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(-1, 1))
+            .croppedImageTile()
+            ),
+        Container(
+          child: _Tile(
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(0, 1))
+            .croppedImageTile()
+        ),
+        Container(
+          child: _Tile(
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(1, 1))
+            .croppedImageTile()
+        )
       ],
     );
   }
