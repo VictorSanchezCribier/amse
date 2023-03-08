@@ -24,8 +24,13 @@ class Tile {
 }
 
 class DisplayGridWithSlider extends StatefulWidget {
-  List<Widget> tuiles = [];
+  @override
+  State<DisplayGridWithSlider> createState() => _DisplayGridWithSlider();
+}
 
+class _DisplayGridWithSlider extends State<DisplayGridWithSlider> {
+  int nombreColones = 2;
+  List<Widget> tuiles = [];
 
   List<Widget> buildTiles(nombre) {
     for (int x = 1; x <= nombre; x++) {
@@ -39,25 +44,32 @@ class DisplayGridWithSlider extends StatefulWidget {
     }
     return (tuiles);
   }
-  @override
-  State<DisplayGridWithSlider> createState() => _DisplayGridWithSlider();
 
-}
-class _DisplayGridWithSlider extends State<DisplayGridWithSlider>{
-    int nombreColones = 2;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Exercice 5c"),
       ),
-      body: GridView.count(
+      body: Column(children: [
+        GridView.count(
         crossAxisCount: nombreColones,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
+        children: buildTiles(nombreColones),
       ),
-
-
+      Slider(
+        value: nombreColones.toDouble(),
+        min: 0,
+        max: 10,
+        onChanged: (double value) {
+          setState(() {
+            nombreColones=value.toInt();
+          });
+        }
+      )
+      ],
+    ));
+  }
 
 }
-
