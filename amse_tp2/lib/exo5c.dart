@@ -30,19 +30,18 @@ class DisplayGridWithSlider extends StatefulWidget {
 
 class _DisplayGridWithSlider extends State<DisplayGridWithSlider> {
   int nombreColones = 2;
-  List<Widget> tuiles = [];
 
   List<Widget> buildTiles(nombre) {
+    List<Widget> tuiles = [];
     for (int x = 1; x <= nombre; x++) {
       for (int y = 1; y <= nombre; y++) {
         tuiles.add(Container(
             child: Tile(
                     imageURL: 'https://picsum.photos/512',
-                    alignment: Alignment(1, -1))
-                .croppedImageTile()));
+                    alignment: Alignment((x-1)*(2)/(nombreColones-1)-1, (y-1)*2/(nombreColones-1)-1))                .croppedImageTile()));
       }
     }
-    return (tuiles);
+    return tuiles;
   }
 
   @override
@@ -51,25 +50,30 @@ class _DisplayGridWithSlider extends State<DisplayGridWithSlider> {
       appBar: AppBar(
         title: Text("Exercice 5c"),
       ),
-      body: Column(children: [
-        GridView.count(
-        crossAxisCount: nombreColones,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        children: buildTiles(nombreColones),
+      body: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height *
+                0.8, // définir une hauteur explicite
+            child: GridView.count(
+              crossAxisCount: nombreColones,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              children: buildTiles(nombreColones),
+            ),
+          ),
+          Slider(
+            value: nombreColones.toDouble(),
+            min: 0,
+            max: 10,
+            onChanged: (double value) {
+              setState(() {
+                nombreColones = value.toInt();
+              });
+            },
+          ),
+        ],
       ),
-      Slider(
-        value: nombreColones.toDouble(),
-        min: 0,
-        max: 10,
-        onChanged: (double value) {
-          setState(() {
-            nombreColones=value.toInt();
-          });
-        }
-      )
-      ],
-    ));
+    );
   }
-
 }
