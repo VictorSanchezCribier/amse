@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Tile {
   String imageURL;
   Alignment alignment;
+  
 
   Tile({required this.imageURL, required this.alignment});
 
@@ -29,16 +30,16 @@ class DisplayGridWithSlider extends StatefulWidget {
 }
 
 class _DisplayGridWithSlider extends State<DisplayGridWithSlider> {
-  int nombreColones = 2;
+  int _nombreColones = 3;
 
   List<Widget> buildTiles(nombre) {
     List<Widget> tuiles = [];
-    for (int x = 1; x <= nombre; x++) {
-      for (int y = 1; y <= nombre; y++) {
+    for (int y = 1; y <= nombre; y++) {
+      for (int x = 1; x <= nombre; x++) {
         tuiles.add(Container(
             child: Tile(
                     imageURL: 'https://picsum.photos/512',
-                    alignment: Alignment((x-1)*(2)/(nombreColones-1)-1, (y-1)*2/(nombreColones-1)-1))                .croppedImageTile()));
+                    alignment: Alignment((((x - 1) * (2)) / (nombre - 1)) - 1, (((y - 1) * (2)) / (nombre - 1)) - 1)).croppedImageTile()));
       }
     }
     return tuiles;
@@ -53,22 +54,23 @@ class _DisplayGridWithSlider extends State<DisplayGridWithSlider> {
       body: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height *
-                0.8, // définir une hauteur explicite
+            height: MediaQuery.of(context).size.height *0.8, // définir une hauteur explicite
             child: GridView.count(
-              crossAxisCount: nombreColones,
+              crossAxisCount: _nombreColones,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              children: buildTiles(nombreColones),
+              children: buildTiles(_nombreColones),
             ),
           ),
+        
           Slider(
-            value: nombreColones.toDouble(),
-            min: 0,
-            max: 10,
+            value: _nombreColones.toDouble(),
+            min: 3,
+            max: 9,
+            divisions: 4,
             onChanged: (double value) {
               setState(() {
-                nombreColones = value.toInt();
+                _nombreColones = value.toInt();
               });
             },
           ),
