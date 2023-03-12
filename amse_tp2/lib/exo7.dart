@@ -8,16 +8,28 @@ import 'dart:math' as math;
 math.Random random = new math.Random();
 
 class Tile {
-  Color color;
-  int position;
+  String imageURL;
+  Alignment alignment;
+  int nombreColones;
 
-  Tile(this.color, this.position);
-  Tile.randomColor(int position)
-      : color = Color.fromARGB(
-          255, random.nextInt(255), random.nextInt(255), random.nextInt(255)),
-        position = position;
+  Tile({required this.imageURL, required this.alignment, required this.nombreColones});
+
+  Widget croppedImageTile() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: ClipRect(
+        child: Container(
+          child: Align(
+            alignment: this.alignment,
+            widthFactor: 1/nombreColones,
+            heightFactor: 1/nombreColones,
+            child: Image.network(this.imageURL),
+          ),
+        ),
+      ),
+    );
+  }
 }
-
 // ==============
 // Widgets
 // ==============
@@ -38,11 +50,9 @@ class _TileWidgetState extends State<TileWidget> {
     return GestureDetector(
       onTap: widget.onPressed,
       child: Container(
-        color: widget.tile.color,
         child: Center(
-          child: Text(
-            '${widget.tile.position}',
-            style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+          child: 
+
           ),
         ),
       ),
