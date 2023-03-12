@@ -51,8 +51,9 @@ class _TileWidgetState extends State<TileWidget> {
       onTap: widget.onPressed,
       child: Container(
         child: Center(
-          child: 
-
+          child: Text(
+            '',
+            style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -75,7 +76,7 @@ class PositionedTilesState extends State<PositionedTiles> {
     super.initState();
 
     tiles = List<Tile>.generate(
-        gridSize * gridSize, (index) => Tile.randomColor(index));
+        gridSize * gridSize, (index) => Tile(alignment: (((((index%gridSize - 1) * (2)) / (gridSize - 1)) - 1).toInt(), ((((index~/gridSize - 1) * (2)) / (gridSize - 1)) - 1).toInt()), imageURL: 'https://picsum.photos/512', nombreColones: gridSize ));
     emptyIndex = 0;
   }
 
@@ -94,7 +95,7 @@ class PositionedTilesState extends State<PositionedTiles> {
     setState(() {
       gridSize = value;
       tiles = List<Tile>.generate(
-          gridSize * gridSize, (index) => Tile.randomColor(index));
+          gridSize * gridSize, (index) =>);
       emptyIndex = 0;
     });
   }
