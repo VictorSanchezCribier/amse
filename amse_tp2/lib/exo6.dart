@@ -89,6 +89,13 @@ class PositionedTilesState extends State<PositionedTiles> {
     });
   }
 
+  void shuffleTiles() {
+    setState(() {
+      tiles.shuffle();
+      emptyIndex = tiles.indexWhere((tile) => tile.position == 0);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,6 +129,10 @@ class PositionedTilesState extends State<PositionedTiles> {
               }),
             ),
           ),
+          ElevatedButton(
+            onPressed: shuffleTiles,
+            child: Text('Start'),
+          ),
           Slider(
             value: gridSize.toDouble(),
             min: 2,
@@ -137,5 +148,3 @@ class PositionedTilesState extends State<PositionedTiles> {
     );
   }
 }
-
-

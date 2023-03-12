@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-// ==============
-// Models
-// ============== 
-
 math.Random random = new math.Random();
 
 class Tile {
@@ -12,7 +8,11 @@ class Tile {
   Alignment alignment;
   int nombreColones;
 
-  Tile({required this.imageURL, required this.alignment, required this.nombreColones});
+  Tile({
+    required this.imageURL,
+    required this.alignment,
+    required this.nombreColones,
+  });
 
   Widget croppedImageTile() {
     return FittedBox(
@@ -21,8 +21,8 @@ class Tile {
         child: Container(
           child: Align(
             alignment: this.alignment,
-            widthFactor: 1/nombreColones,
-            heightFactor: 1/nombreColones,
+            widthFactor: 1 / nombreColones,
+            heightFactor: 1 / nombreColones,
             child: Image.network(this.imageURL),
           ),
         ),
@@ -30,15 +30,15 @@ class Tile {
     );
   }
 }
-// ==============
-// Widgets
-// ==============
 
 class TileWidget extends StatefulWidget {
   final Tile tile;
   final VoidCallback onPressed;
 
-  TileWidget({required this.tile, required this.onPressed});
+  TileWidget({
+    required this.tile,
+    required this.onPressed,
+  });
 
   @override
   _TileWidgetState createState() => _TileWidgetState();
@@ -66,6 +66,13 @@ class PositionedTiles extends StatefulWidget {
   State<StatefulWidget> createState() => PositionedTilesState();
 }
 
+
+
+
+
+
+
+
 class PositionedTilesState extends State<PositionedTiles> {
   late List<Tile> tiles;
   late int emptyIndex;
@@ -75,8 +82,7 @@ class PositionedTilesState extends State<PositionedTiles> {
   void initState() {
     super.initState();
 
-    tiles = List<Tile>.generate(
-        gridSize * gridSize, (index) => Tile(alignment: (((((index%gridSize - 1) * (2)) / (gridSize - 1)) - 1).toInt(), ((((index~/gridSize - 1) * (2)) / (gridSize - 1)) - 1).toInt()), imageURL: 'https://picsum.photos/512', nombreColones: gridSize ));
+    tiles = buildTiles(gridSize);
     emptyIndex = 0;
   }
 
@@ -94,10 +100,25 @@ class PositionedTilesState extends State<PositionedTiles> {
   void updateGridSize(int value) {
     setState(() {
       gridSize = value;
-      tiles = List<Tile>.generate(
-          gridSize * gridSize, (index) =>);
+      tiles = buildTiles(gridSize);
       emptyIndex = 0;
     });
+  }
+
+  List<Tile> buildTiles(int nombre) {
+    List<Tile> tuiles = [];
+    for (int y = 1; y <= nombre; y++) {
+      for (int x = 1; x <= nombre; x++) {
+        tuiles.add(Tile(
+            nombreColones: nombre,
+            imageURL: 'https://picsum.photos/512',
+            alignment: Alignment(
+              (((x - 1) * (2)) / (nombre - 1)) - 1,
+              (((y - 1) * (2)) / (nombre - 1)) - 1,
+            )));
+      }
+    }
+    return tuiles;
   }
 
   @override
@@ -119,34 +140,42 @@ class PositionedTilesState extends State<PositionedTiles> {
                     : TileWidget(
                         tile: tiles[index],
                         onPressed: () {
-                          setState(() {
-                            if (canMove(index)) {
-                              // Swap tiles
-                              Tile temp = tiles[index];
-                              tiles[index] = tiles[emptyIndex];
-                              tiles[emptyIndex] = temp;
-                              emptyIndex = index;
-                            }
-                          });
-                        },
-                      );
-              }),
-            ),
-          ),
-          Slider(
-            value: gridSize.toDouble(),
-            min: 2,
-            max: 6,
-            divisions: 4,
-            label: gridSize.toString(),
-            onChanged: (double value) {
-              updateGridSize(value.toInt());
-            },
-          ),
-        ],
-      ),
+  setState(() {
+    if (canMove(index)) {
+      // Swap tiles
+      Tile temp = tiles[index];
+      tiles[index] = tiles[emptyIndex];
+      tiles[emptyIndex] = temp;
+      emptyIndex = index;
+      // Check if puzzle is complete
+     /* if (tiles.last.imageURL == null) {
+        // Puzzle is complete
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Congratulations!'),
+                content: Text('You solved the puzzle!'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Play Again'),
+                    onPressed: () {
+                      updateGridSize(gridSize);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            });*/
+      }
+    });
+  });
+}
+              )
+            )
+          )
+        ]
+      )
     );
   }
 }
-
-
