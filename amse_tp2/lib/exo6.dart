@@ -21,22 +21,30 @@ class Tile {
 // Widgets
 // ==============
 
-class TileWidget extends StatelessWidget {
+class TileWidget extends StatefulWidget {
   final Tile tile;
+  final Function onTap;
 
-  TileWidget(this.tile);
+  TileWidget(this.tile, {required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
-    return this.coloredBox();
-  }
+  _TileWidgetState createState() => _TileWidgetState();
+}
 
-  Widget coloredBox() {
-    return Container(
-        color: tile.color,
+class _TileWidgetState extends State<TileWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        widget.onTap();
+      },
+      child: Container(
+        color: widget.tile.color,
         child: Padding(
           padding: EdgeInsets.all(70.0),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -48,8 +56,7 @@ class PositionedTiles extends StatefulWidget {
 }
 
 class PositionedTilesState extends State<PositionedTiles> {
-  List<Widget> tiles =
-      List<Widget>.generate(2, (index) => TileWidget(Tile.randomColor()));
+  List<Tile> tiles = List<Tile>.generate(2, (index) => Tile.randomColor());
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +65,20 @@ class PositionedTilesState extends State<PositionedTiles> {
         title: Text('Moving Tiles'),
         centerTitle: true,
       ),
-      body: Row(children: tiles),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.sentiment_very_satisfied), onPressed: swapTiles),
+      body: Row(
+        children: tiles.asMap().entries.map((entry) {
+          return TileWidget(
+            entry.value,
+            onTap: () {
+              swapTiles(entry.key);
+            },
+          );
+        }).toList(),
+      ),
     );
   }
 
-  swapTiles() {
+swapTiles(int key) {
     setState(() {
       tiles.insert(1, tiles.removeAt(0));
     });
