@@ -36,10 +36,11 @@ class _TileWidgetState extends State<TileWidget> {
     return GestureDetector(
       onTap: widget.onPressed,
       child: Container(
-          color: widget.tile.color,
-          child: Padding(
-            padding: EdgeInsets.all(70.0),
-          )),
+        color: widget.tile.color,
+        child: Padding(
+          padding: EdgeInsets.all(70.0),
+        ),
+      ),
     );
   }
 }
@@ -52,7 +53,16 @@ class PositionedTiles extends StatefulWidget {
 }
 
 class PositionedTilesState extends State<PositionedTiles> {
-  List<Tile> tiles = List<Tile>.generate(9, (index) => Tile.randomColor());
+  late List<Tile> tiles;
+  late int emptyIndex;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tiles = List<Tile>.generate(8, (index) => Tile.randomColor());
+    emptyIndex = 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,18 +74,30 @@ class PositionedTilesState extends State<PositionedTiles> {
       body: GridView.count(
         crossAxisCount: 3,
         children: tiles.map((tile) {
-          return TileWidget(
-            tile: tile,
-            onPressed: () {
-              setState(() {
-                int currentIndex = tiles.indexOf(tile);
-                int newIndex = (currentIndex + 1) % tiles.length;
-                Tile temp = tiles[currentIndex];
-                tiles[currentIndex] = tiles[newIndex];
-                tiles[newIndex] = temp;
-              });
-            },
-          );
+          return tile == null
+              ? Container(color: Colors.transparent)
+              : TileWidget(
+                  tile: tile,
+                  onPressed: () {
+                    setState(() {
+                      int currentIndex = tiles.indexOf(tile);
+                      if (currentIndex == emptyIndex) {
+                        return;
+                      }
+                      if (currentIndex < emptyIndex) {
+                        for (int i = currentIndex; i < emptyIndex; i++) {
+                          tiles[i] = tiles[i + 1];
+                        }
+                      } else {
+                        for (int i = currentIndex; i > emptyIndex; i--) {
+                          tiles[i] = tiles[i - 1];
+                        }
+                      }
+                      tiles[emptyIndex] = tile;
+                      emptyIndex = currentIndex;
+                    });
+                  },
+                );
         }).toList(),
       ),
     );
