@@ -50,8 +50,6 @@ class _TileWidgetState extends State<TileWidget> {
   }
 }
 
-void main() => runApp(new MaterialApp(home: PositionedTiles()));
-
 class PositionedTiles extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => PositionedTilesState();
@@ -60,25 +58,35 @@ class PositionedTiles extends StatefulWidget {
 class PositionedTilesState extends State<PositionedTiles> {
   late List<Tile> tiles;
   late int emptyIndex;
+  int gridSize = 3;
 
   @override
   void initState() {
     super.initState();
 
     tiles = List<Tile>.generate(
-        9, (index) => Tile.randomColor(index));
+        gridSize * gridSize, (index) => Tile.randomColor(index));
     emptyIndex = 0;
   }
 
   bool canMove(int tileIndex) {
     // Check if the tile can be moved
-    int x = tileIndex % 3;
-    int y = tileIndex ~/ 3;
-    int emptyX = emptyIndex % 3;
-    int emptyY = emptyIndex ~/ 3;
+    int x = tileIndex % gridSize;
+    int y = tileIndex ~/ gridSize;
+    int emptyX = emptyIndex % gridSize;
+    int emptyY = emptyIndex ~/ gridSize;
 
     return (x == emptyX && (y - emptyY).abs() == 1) ||
         (y == emptyY && (x - emptyX).abs() == 1);
+  }
+
+  void updateGridSize(int value) {
+    setState(() {
+      gridSize = value;
+      tiles = List<Tile>.generate(
+          gridSize * gridSize, (index) => Tile.randomColor(index));
+      emptyIndex = 0;
+    });
   }
 
   @override
@@ -88,28 +96,46 @@ class PositionedTilesState extends State<PositionedTiles> {
         title: Text('Moving Tiles'),
         centerTitle: true,
       ),
-      body: GridView.count(
-        crossAxisCount: 3,
-        children: List.generate(tiles.length, (index) {
-          return index == emptyIndex
-              ? Container(color: Colors.transparent)
-              : TileWidget(
-                  tile: tiles[index],
-                  onPressed: () {
-                    setState(() {
-                      if (canMove(index)) {
-                        // Swap tiles
-                        Tile temp = tiles[index];
-                        tiles[index] = tiles[emptyIndex];
-                        tiles[emptyIndex] = temp;
-                        emptyIndex = index;
-                      }
-                    });
-                  },
-                );
-        }),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: gridSize,
+              children: List.generate(tiles.length, (index) {
+                return index == emptyIndex
+                    ? Container(color: Colors.transparent)
+                    : TileWidget(
+                        tile: tiles[index],
+                        onPressed: () {
+                          setState(() {
+                            if (canMove(index)) {
+                              // Swap tiles
+                              Tile temp = tiles[index];
+                              tiles[index] = tiles[emptyIndex];
+                              tiles[emptyIndex] = temp;
+                              emptyIndex = index;
+                            }
+                          });
+                        },
+                      );
+              }),
+            ),
+          ),
+          Slider(
+            value: gridSize.toDouble(),
+            min: 2,
+            max: 6,
+            divisions: 4,
+            label: gridSize.toString(),
+            onChanged: (double value) {
+              updateGridSize(value.toInt());
+            },
+          ),
+        ],
       ),
     );
   }
 }
+
 
