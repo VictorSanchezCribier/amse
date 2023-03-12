@@ -9,11 +9,13 @@ math.Random random = new math.Random();
 
 class Tile {
   Color color;
+  int position;
 
-  Tile(this.color);
-  Tile.randomColor()
+  Tile(this.color, this.position);
+  Tile.randomColor(int position)
       : color = Color.fromARGB(
-            255, random.nextInt(255), random.nextInt(255), random.nextInt(255));
+          255, random.nextInt(255), random.nextInt(255), random.nextInt(255)),
+        position = position;
 }
 
 // ==============
@@ -37,8 +39,11 @@ class _TileWidgetState extends State<TileWidget> {
       onTap: widget.onPressed,
       child: Container(
         color: widget.tile.color,
-        child: Padding(
-          padding: EdgeInsets.all(70.0),
+        child: Center(
+          child: Text(
+            '${widget.tile.position}',
+            style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );
@@ -60,8 +65,20 @@ class PositionedTilesState extends State<PositionedTiles> {
   void initState() {
     super.initState();
 
-    tiles = List<Tile>.generate(8, (index) => Tile.randomColor());
+    tiles = List<Tile>.generate(
+        9, (index) => Tile.randomColor(index));
     emptyIndex = 0;
+  }
+
+  bool canMove(int tileIndex) {
+    // Check if the tile can be moved
+    int x = tileIndex % 3;
+    int y = tileIndex ~/ 3;
+    int emptyX = emptyIndex % 3;
+    int emptyY = emptyIndex ~/ 3;
+
+    return (x == emptyX && (y - emptyY).abs() == 1) ||
+        (y == emptyY && (x - emptyX).abs() == 1);
   }
 
   @override
@@ -73,33 +90,26 @@ class PositionedTilesState extends State<PositionedTiles> {
       ),
       body: GridView.count(
         crossAxisCount: 3,
-        children: tiles.map((tile) {
-          return tile == null
+        children: List.generate(tiles.length, (index) {
+          return index == emptyIndex
               ? Container(color: Colors.transparent)
               : TileWidget(
-                  tile: tile,
+                  tile: tiles[index],
                   onPressed: () {
                     setState(() {
-                      int currentIndex = tiles.indexOf(tile);
-                      if (currentIndex == emptyIndex) {
-                        return;
+                      if (canMove(index)) {
+                        // Swap tiles
+                        Tile temp = tiles[index];
+                        tiles[index] = tiles[emptyIndex];
+                        tiles[emptyIndex] = temp;
+                        emptyIndex = index;
                       }
-                      if (currentIndex < emptyIndex) {
-                        for (int i = currentIndex; i < emptyIndex; i++) {
-                          tiles[i] = tiles[i + 1];
-                        }
-                      } else {
-                        for (int i = currentIndex; i > emptyIndex; i--) {
-                          tiles[i] = tiles[i - 1];
-                        }
-                      }
-                      tiles[emptyIndex] = tile;
-                      emptyIndex = currentIndex;
                     });
                   },
                 );
-        }).toList(),
+        }),
       ),
     );
   }
 }
+
