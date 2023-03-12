@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class Tile {
   String imageURL;
   Alignment alignment;
-  
+  int nombreColones;
 
-  Tile({required this.imageURL, required this.alignment});
+  Tile({required this.imageURL, required this.alignment, required this.nombreColones});
 
   Widget croppedImageTile() {
     return FittedBox(
@@ -14,8 +14,8 @@ class Tile {
         child: Container(
           child: Align(
             alignment: this.alignment,
-            widthFactor: 0.3,
-            heightFactor: 0.3,
+            widthFactor: 1/nombreColones,
+            heightFactor: 1/nombreColones,
             child: Image.network(this.imageURL),
           ),
         ),
@@ -38,8 +38,11 @@ class _DisplayGridWithSlider extends State<DisplayGridWithSlider> {
       for (int x = 1; x <= nombre; x++) {
         tuiles.add(Container(
             child: Tile(
+                    nombreColones: _nombreColones,
                     imageURL: 'https://picsum.photos/512',
-                    alignment: Alignment((((x - 1) * (2)) / (nombre - 1)) - 1, (((y - 1) * (2)) / (nombre - 1)) - 1)).croppedImageTile()));
+                    alignment: Alignment((((x - 1) * (2)) / (nombre - 1)) - 1,
+                        (((y - 1) * (2)) / (nombre - 1)) - 1))
+                .croppedImageTile()));
       }
     }
     return tuiles;
@@ -54,15 +57,15 @@ class _DisplayGridWithSlider extends State<DisplayGridWithSlider> {
       body: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height *0.8, // définir une hauteur explicite
+            height: MediaQuery.of(context).size.height *
+                0.8, // définir une hauteur explicite
             child: GridView.count(
               crossAxisCount: _nombreColones,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
               children: buildTiles(_nombreColones),
             ),
           ),
-        
           Slider(
             value: _nombreColones.toDouble(),
             min: 3,
