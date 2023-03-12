@@ -58,7 +58,7 @@ class _DisplayGridWithSlider extends State<DisplayGridWithSlider> {
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height *
-                0.8, // définir une hauteur explicite
+                0.8, 
             child: GridView.count(
               crossAxisCount: _nombreColones,
               crossAxisSpacing: 5,
