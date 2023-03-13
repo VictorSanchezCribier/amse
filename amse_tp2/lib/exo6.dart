@@ -59,6 +59,8 @@ class PositionedTilesState extends State<PositionedTiles> {
   late List<Tile> tiles;
   late int emptyIndex;
   int gridSize = 3;
+  bool won = false;
+
 
   @override
   void initState() {
@@ -75,6 +77,7 @@ class PositionedTilesState extends State<PositionedTiles> {
     int y = tileIndex ~/ gridSize;
     int emptyX = emptyIndex % gridSize;
     int emptyY = emptyIndex ~/ gridSize;
+    
 
     return (x == emptyX && (y - emptyY).abs() == 1) ||
         (y == emptyY && (x - emptyX).abs() == 1);
@@ -93,6 +96,19 @@ class PositionedTilesState extends State<PositionedTiles> {
     setState(() {
       tiles.shuffle();
       emptyIndex = tiles.indexWhere((tile) => tile.position == 0);
+    });
+  }
+    void checkWon() {
+    bool isWon = true;
+    for (int i = 0; i < tiles.length; i++) {
+      if (tiles[i].position != i) {
+        isWon = false;
+        break;
+      }
+    }
+
+    setState(() {
+      won = isWon;
     });
   }
 
@@ -122,6 +138,8 @@ class PositionedTilesState extends State<PositionedTiles> {
                               tiles[index] = tiles[emptyIndex];
                               tiles[emptyIndex] = temp;
                               emptyIndex = index;
+                              checkWon();
+
                             }
                           });
                         },
@@ -142,6 +160,11 @@ class PositionedTilesState extends State<PositionedTiles> {
             onChanged: (double value) {
               updateGridSize(value.toInt());
             },
+          ),
+          SizedBox(height: 20),
+          Text(
+            won ? 'Gagné!' : '',
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
         ],
       ),
