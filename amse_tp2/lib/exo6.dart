@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 // ==============
 // Models
-// ============== 
+// ==============
 
 math.Random random = new math.Random();
 
@@ -14,7 +14,7 @@ class Tile {
   Tile(this.color, this.position);
   Tile.randomColor(int position)
       : color = Color.fromARGB(
-          255, random.nextInt(255), random.nextInt(255), random.nextInt(255)),
+            255, random.nextInt(255), random.nextInt(255), random.nextInt(255)),
         position = position;
 }
 
@@ -61,7 +61,6 @@ class PositionedTilesState extends State<PositionedTiles> {
   int gridSize = 3;
   bool won = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -77,7 +76,6 @@ class PositionedTilesState extends State<PositionedTiles> {
     int y = tileIndex ~/ gridSize;
     int emptyX = emptyIndex % gridSize;
     int emptyY = emptyIndex ~/ gridSize;
-    
 
     return (x == emptyX && (y - emptyY).abs() == 1) ||
         (y == emptyY && (x - emptyX).abs() == 1);
@@ -98,7 +96,8 @@ class PositionedTilesState extends State<PositionedTiles> {
       emptyIndex = tiles.indexWhere((tile) => tile.position == 0);
     });
   }
-    void checkWon() {
+
+  void checkWon() {
     bool isWon = true;
     for (int i = 0; i < tiles.length; i++) {
       if (tiles[i].position != i) {
@@ -139,7 +138,6 @@ class PositionedTilesState extends State<PositionedTiles> {
                               tiles[emptyIndex] = temp;
                               emptyIndex = index;
                               checkWon();
-
                             }
                           });
                         },
